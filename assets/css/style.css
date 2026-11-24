@@ -2,18 +2,18 @@
 :root{
   --bg:#02060f; --bg2:#06101f; --panel:rgba(10,20,34,.66); --line:rgba(255,255,255,.09);
   --txt:#e8f1f8; --mut:#9db0c2;
-  --a:#ffc726; --a2:#ff9f0a; --a-rgb:255,199,38; --on-a:#0b0a00;
-  --b:#2a5bff; --b-rgb:42,91,255; --ultra:#00267f;
-  --g:#2357e0; --g2:#00267f; --g-rgb:35,87,224; --on-g:#fff;
-  --k:#ffd447; --k2:#ffb300; --k-rgb:255,199,38; --on-k:#0b0a00;
+  --a:#ffbf00; --a2:#ff9500; --a-rgb:255,191,0; --on-a:#0b0a00;
+  --b:#1f55ff; --b-rgb:31,85,255; --ultra:#00267f;
+  --g:#1a50ff; --g2:#00229a; --g-rgb:26,80,255; --on-g:#fff;
+  --k:#ffc400; --k2:#ff9a00; --k-rgb:255,196,0; --on-k:#0b0a00;
   --fd:'Orbitron',system-ui,sans-serif; --fb:'Rajdhani',system-ui,sans-serif;
   --r:14px; --cut:18px;
 }
-:root[data-theme="blue"]{--a:#4d94ff;--a2:#0a3fd1;--a-rgb:77,148,255;--b:#0a3fd1;--b-rgb:20,80,230;--g:#4d94ff;--g2:#0a3fd1;--g-rgb:77,148,255;--k:#4d94ff;--k2:#0a3fd1;--k-rgb:77,148,255;--on-a:#fff;--on-g:#fff;--on-k:#fff}
-:root[data-theme="yellow"]{--a:#ffd447;--a2:#ffab00;--a-rgb:255,199,38;--b:#ffab00;--b-rgb:255,170,0;--g:#ffd447;--g2:#ffab00;--g-rgb:255,199,38;--k:#ffd447;--k2:#ffab00;--k-rgb:255,199,38;--on-a:#0b0a00;--on-g:#0b0a00;--on-k:#0b0a00}
-:root[data-theme="red"]{--a:#ff4757;--a2:#c4001d;--a-rgb:255,71,87;--b:#c4001d;--b-rgb:224,20,50;--g:#ff4757;--g2:#c4001d;--g-rgb:255,71,87;--k:#ff4757;--k2:#c4001d;--k-rgb:255,71,87;--on-a:#fff;--on-g:#fff;--on-k:#fff}
-:root[data-theme="green"]{--a:#2be585;--a2:#0a9f4f;--a-rgb:43,229,133;--b:#0a9f4f;--b-rgb:12,170,90;--g:#2be585;--g2:#0a9f4f;--g-rgb:43,229,133;--k:#2be585;--k2:#0a9f4f;--k-rgb:43,229,133;--on-a:#00150a;--on-g:#00150a;--on-k:#00150a}
-:root[data-theme="white"]{--a:#f5f8ff;--a2:#aab4c6;--a-rgb:245,248,255;--b:#aab4c6;--b-rgb:170,182,204;--g:#f5f8ff;--g2:#aab4c6;--g-rgb:245,248,255;--k:#f5f8ff;--k2:#aab4c6;--k-rgb:245,248,255;--on-a:#05080f;--on-g:#05080f;--on-k:#05080f}
+:root[data-theme="blue"]{--a:#1f7aff;--a2:#0033cc;--a-rgb:31,122,255;--b:#0033cc;--b-rgb:0,70,230;--g:#1f7aff;--g2:#0033cc;--g-rgb:31,122,255;--k:#1f7aff;--k2:#0033cc;--k-rgb:31,122,255;--on-a:#fff;--on-g:#fff;--on-k:#fff}
+:root[data-theme="yellow"]{--a:#ffc400;--a2:#ff9a00;--a-rgb:255,196,0;--b:#ff9a00;--b-rgb:255,150,0;--g:#ffc400;--g2:#ff9a00;--g-rgb:255,196,0;--k:#ffc400;--k2:#ff9a00;--k-rgb:255,196,0;--on-a:#0b0a00;--on-g:#0b0a00;--on-k:#0b0a00}
+:root[data-theme="red"]{--a:#ff2442;--a2:#b8001a;--a-rgb:255,36,66;--b:#b8001a;--b-rgb:230,0,40;--g:#ff2442;--g2:#b8001a;--g-rgb:255,36,66;--k:#ff2442;--k2:#b8001a;--k-rgb:255,36,66;--on-a:#fff;--on-g:#fff;--on-k:#fff}
+:root[data-theme="green"]{--a:#00e070;--a2:#009a45;--a-rgb:0,224,112;--b:#009a45;--b-rgb:0,170,80;--g:#00e070;--g2:#009a45;--g-rgb:0,224,112;--k:#00e070;--k2:#009a45;--k-rgb:0,224,112;--on-a:#00150a;--on-g:#00150a;--on-k:#00150a}
+:root[data-theme="white"]{--a:#ffffff;--a2:#b4c2dc;--a-rgb:255,255,255;--b:#b4c2dc;--b-rgb:150,170,205;--g:#ffffff;--g2:#b4c2dc;--g-rgb:255,255,255;--k:#ffffff;--k2:#b4c2dc;--k-rgb:255,255,255;--on-a:#05080f;--on-g:#05080f;--on-k:#05080f}
 
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;scroll-padding-top:96px;-webkit-text-size-adjust:100%}
@@ -62,7 +62,7 @@ h1,h2,h3{font-family:var(--fd);line-height:1.1;letter-spacing:.01em;text-wrap:ba
 .theme{display:flex;gap:7px;padding-left:6px}
 .theme button{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.35);transition:transform .2s,box-shadow .2s}
 .theme button[data-set=bajan]{background:linear-gradient(90deg,#00267f 33%,#ffc726 33% 66%,#00267f 66%)}
-.theme button[data-set=blue]{background:#3b86ff}.theme button[data-set=yellow]{background:#ffc726}.theme button[data-set=red]{background:#ff3b4a}.theme button[data-set=green]{background:#22d97a}.theme button[data-set=white]{background:#f2f6ff}
+.theme button[data-set=blue]{background:#1f7aff}.theme button[data-set=yellow]{background:#ffc400}.theme button[data-set=red]{background:#ff2442}.theme button[data-set=green]{background:#00e070}.theme button[data-set=white]{background:#fff}
 .theme button:hover{transform:scale(1.25)}
 :root:not([data-theme]) .theme [data-set=bajan],:root[data-theme=bajan] .theme [data-set=bajan],:root[data-theme=blue] .theme [data-set=blue],:root[data-theme=yellow] .theme [data-set=yellow],:root[data-theme=red] .theme [data-set=red],:root[data-theme=green] .theme [data-set=green],:root[data-theme=white] .theme [data-set=white]{border-color:#fff;box-shadow:0 0 12px currentColor}
 .burger{display:none;width:44px;height:44px;margin-left:auto;flex-direction:column;justify-content:center;gap:6px;align-items:center}
