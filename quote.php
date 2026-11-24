@@ -1,13 +1,59 @@
 <?php
 /**
  * Bajan Concepts — quote request handler.
- * Works on any standard PHP shared host (cPanel etc.) using the built-in mail().
+ * Works on any standard PHP shared host (cPanel etc.) sending through Spacemail SMTP (login kept outside the web root).
  *
  * EDIT THESE THREE LINES once the Spacemail mailbox exists:
  */
-const QUOTE_TO   = 'bajaninc@yahoo.com';          // where quote requests are delivered
+const QUOTE_TO   = 'quotes@bajanconcepts.net, bajaninc@yahoo.com'; // where quote requests are delivered
+const CONFIRM_CC = 'bajaninc@yahoo.com';         // copied on each customer confirmation
 const MAIL_FROM  = 'quotes@bajanconcepts.net';    // must be a real mailbox/domain on your host
 const SITE_NAME  = 'Bajan Concepts';
+
+/* Mail goes out through Spacemail SMTP. The login lives OUTSIDE the web root in
+   ~/bajan-private/smtp.php (returns ['host'=>..,'port'=>465,'user'=>..,'pass'=>..]). */
+const SMTP_CONFIG = __DIR__ . '/../bajan-private/smtp.php';
+
+function smtp_send(array $rcpts, string $data): bool {
+    $c = @include SMTP_CONFIG;
+    if (!is_array($c) || empty($c['pass'])) { error_log('quote.php: SMTP config missing'); return false; }
+    $host = $c['host'] ?? 'mail.spacemail.com'; $port = (int)($c['port'] ?? 465);
+    $fp = @stream_socket_client("ssl://$host:$port", $en, $es, 20, STREAM_CLIENT_CONNECT,
+        stream_context_create(['ssl' => ['verify_peer' => true, 'verify_peer_name' => true]]));
+    if (!$fp) { error_log("quote.php: SMTP connect failed $en $es"); return false; }
+    stream_set_timeout($fp, 20);
+    $read = function () use ($fp) { $r = ''; while (($l = fgets($fp, 515)) !== false) { $r .= $l; if (isset($l[3]) && $l[3] === ' ') break; } return $r; };
+    $cmd  = function (string $line, string $expect) use ($fp, $read) {
+        if ($line !== '') fwrite($fp, $line . "\r\n");
+        $r = $read();
+        if (strpos($r, $expect) !== 0) { throw new RuntimeException(trim(preg_replace('/AUTH.*$/s', 'AUTH ***', $line)) . ' -> ' . trim($r)); }
+        return $r;
+    };
+    try {
+        $cmd('', '220');
+        $cmd('EHLO bajanconcepts.net', '250');
+        $cmd('AUTH LOGIN', '334');
+        $cmd(base64_encode($c['user']), '334');
+        $cmd(base64_encode($c['pass']), '235');
+        $cmd('MAIL FROM:<' . MAIL_FROM . '>', '250');
+        foreach ($rcpts as $r) { $cmd('RCPT TO:<' . $r . '>', '25'); }
+        $cmd('DATA', '354');
+        $data = preg_replace('/(?<!\r)\n/', "\r\n", $data);
+        $data = preg_replace('/^\./m', '..', $data);
+        $cmd($data . "\r\n.", '250');
+        $cmd('QUIT', '221');
+        fclose($fp); return true;
+    } catch (Throwable $e) { error_log('quote.php: SMTP ' . $e->getMessage()); @fclose($fp); return false; }
+}
+
+/* Build a full message (headers + body) and send it */
+function send_mail(array $to, array $cc, string $subjectEnc, string $headers, string $body): bool {
+    $all = "Date: " . date('r') . "\r\nTo: " . implode(', ', $to) . "\r\n"
+         . ($cc ? "Cc: " . implode(', ', $cc) . "\r\n" : '')
+         . "Subject: $subjectEnc\r\nMessage-ID: <" . bin2hex(random_bytes(12)) . "@bajanconcepts.net>\r\n"
+         . $headers . "\r\n\r\n" . $body;
+    return smtp_send(array_merge($to, $cc), $all);
+}
 
 /* ------------------------------------------------------------------ */
 $wantsJson = stripos($_SERVER['HTTP_ACCEPT'] ?? '', 'application/json') !== false;
@@ -107,7 +153,7 @@ if ($attachments) {
 }
 
 $subjectEnc = '=?UTF-8?B?' . base64_encode($subject) . '?=';
-$sent = @mail(QUOTE_TO, $subjectEnc, $msg, implode("\r\n", $headers), '-f' . MAIL_FROM);
+$sent = send_mail(array_map('trim', explode(',', QUOTE_TO)), [], $subjectEnc, implode("\r\n", $headers), $msg);
 
 /* Always keep a backup copy so no lead is lost if mail delivery hiccups */
 @file_put_contents($dataDir . '/quotes.jsonl',
@@ -121,7 +167,7 @@ if (!$sent) { done(false, 'Our mail server had a hiccup.', $wantsJson, 500); }
 $ack  = "Hi $name,\n\nThanks for requesting a quote from " . SITE_NAME . ". We received your request for your "
       . trim("$year $make $model") . " and will review it and reply soon.\n\n"
       . "If you have more reference photos or ideas, just reply to this email.\n\n— " . SITE_NAME . "\nSierra Vista, AZ\n";
-@mail($email, '=?UTF-8?B?' . base64_encode('We got your quote request — ' . SITE_NAME) . '?=', $ack,
-      "From: " . SITE_NAME . " <" . MAIL_FROM . ">\r\nReply-To: " . QUOTE_TO . "\r\nContent-Type: text/plain; charset=UTF-8", '-f' . MAIL_FROM);
+send_mail([$email], [CONFIRM_CC], '=?UTF-8?B?' . base64_encode('We got your quote request — ' . SITE_NAME) . '?=',
+      "From: " . SITE_NAME . " <" . MAIL_FROM . ">\r\nReply-To: " . MAIL_FROM . "\r\nMIME-Version: 1.0\r\nContent-Type: text/plain; charset=UTF-8", $ack);
 
 done(true, '', $wantsJson);
