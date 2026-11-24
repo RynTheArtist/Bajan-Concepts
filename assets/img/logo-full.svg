@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="125 15 1720 630" role="img" aria-labelledby="title" color-interpolation="sRGB">
+  <title id="title">Bajan Concepts</title>
+  <defs>
+    <path id="hexagon" d="M424 76 640 202V455L424 580 209 455V202Z"/>
+    <clipPath id="badge">
+      <use href="#hexagon"/>
+    </clipPath>
+    <linearGradient id="rim" gradientUnits="userSpaceOnUse" x1="209" y1="0" x2="640" y2="0">
+      <stop offset="0" stop-color="#008AFF"/>
+      <stop offset=".2784" stop-color="#008AFF"/>
+      <stop offset=".2784" stop-color="#FFEB85"/>
+      <stop offset=".7193" stop-color="#FFEB85"/>
+      <stop offset=".7193" stop-color="#008AFF"/>
+      <stop offset="1" stop-color="#008AFF"/>
+    </linearGradient>
+    <linearGradient id="glow-color" gradientUnits="userSpaceOnUse" x1="209" y1="0" x2="640" y2="0">
+      <stop offset="0" stop-color="#004DFF"/>
+      <stop offset=".2784" stop-color="#004DFF"/>
+      <stop offset=".2784" stop-color="#FFC72A"/>
+      <stop offset=".7193" stop-color="#FFC72A"/>
+      <stop offset=".7193" stop-color="#004DFF"/>
+      <stop offset="1" stop-color="#004DFF"/>
+    </linearGradient>
+    <filter id="outer-glow" filterUnits="userSpaceOnUse" x="139" y="13" width="570" height="630" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="11"/>
+    </filter>
+    <path id="capital-a" fill-rule="evenodd" d="M0 174V45C0 18 18 0 46 0H132C161 0 178 18 178 45V174H137V120H41V174ZM41 84H137V41Q137 37 133 37H45Q41 37 41 41Z"/>
+    <path id="small-c" d="M99 0H27Q0 0 0 26V72Q0 98 27 98H99V74H30Q25 74 25 69V29Q25 24 30 24H99Z"/>
+  </defs>
+
+  <g stroke-linejoin="round">
+    <use href="#hexagon" fill="none" stroke="url(#glow-color)" stroke-width="43" opacity=".92" filter="url(#outer-glow)"/>
+    <g clip-path="url(#badge)">
+      <path fill="#09088C" d="M195 65H655V592H195Z"/>
+      <path fill="#FFC300" d="M329 65H519V592H329Z"/>
+    </g>
+    <use href="#hexagon" fill="none" stroke="url(#rim)" stroke-width="16"/>
+  </g>
+  <path fill="#080707" d="M424 146C433 169 439 188 453 208L437 205V299L459 302C463 273 468 244 479 219L467 220C479 207 502 196 519 193C500 218 478 276 475 328L437 322V506H412V322L373 328C370 276 348 218 329 193C346 196 369 207 381 220L369 219C380 244 385 273 390 302L412 299V205L395 208C409 188 415 169 424 146Z"/>
+
+  <g fill="#FAFAFC" transform="translate(751 167)">
+    <path fill-rule="evenodd" d="M0 0H136C166 0 183 17 183 45V58C183 69 178 80 170 86C178 93 183 103 183 115V131C183 158 166 174 140 174H0ZM40 36V70H136Q143 70 143 63V43Q143 36 136 36ZM40 106V139H137Q144 139 144 132V113Q144 106 137 106Z"/>
+    <use href="#capital-a" x="219"/>
+    <path d="M558 0H599V134C599 158 584 174 557 174H474C447 174 433 159 433 134V113H473V132Q473 138 479 138H552Q558 138 558 132Z"/>
+    <use href="#capital-a" x="636"/>
+    <path d="M855 174V0H893L1006 116V0H1047V174H1008L896 61V174Z"/>
+  </g>
+  <g fill="#FFC100" transform="translate(751 380)">
+    <use href="#small-c"/>
+    <path fill-rule="evenodd" d="M160 0H221Q248 0 248 26V72Q248 98 221 98H160Q133 98 133 72V26Q133 0 160 0ZM163 24Q158 24 158 29V69Q158 74 163 74H218Q223 74 223 69V29Q223 24 218 24Z"/>
+    <path d="M284 98V0H307L373 63V0H398V98H375L309 35V98Z"/>
+    <use href="#small-c" x="437"/>
+    <path d="M573 0H670V24H598V37H654V60H598V74H670V98H573Z"/>
+    <path fill-rule="evenodd" d="M707 0H785Q811 0 811 24V40Q811 64 785 64H732V98H707ZM732 24V41H782Q786 41 786 37V28Q786 24 782 24Z"/>
+    <path d="M843 0H950V24H909V98H884V24H843Z"/>
+    <path d="M994 0H1047Q1073 0 1073 24V31H1048V28Q1048 23 1043 23H998Q993 23 993 28V33Q993 37 998 37H1048Q1074 37 1074 62V73Q1074 98 1048 98H994Q968 98 968 73V67H993V70Q993 75 998 75H1044Q1049 75 1049 70V66Q1049 61 1044 61H994Q968 61 968 37V25Q968 0 994 0Z"/>
+  </g>
+</svg>

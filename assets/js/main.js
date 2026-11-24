@@ -249,7 +249,7 @@
     else if (side === 1) { x = W + 8; y = (1 + Math.floor(Math.random() * Math.max(1, rows - 1))) * cell; dx = -1; }
     else if (side === 2) { y = -8; x = (1 + Math.floor(Math.random() * Math.max(1, cols - 1))) * cell; dy = 1; }
     else { y = H + 8; x = (1 + Math.floor(Math.random() * Math.max(1, cols - 1))) * cell; dy = -1; }
-    return { x: x, y: y, dx: dx, dy: dy, speed: 55 + Math.random() * 30, col: Math.random() < .28 ? gold : blue, pts: [[x, y]], age: 0 };
+    return { x: x, y: y, dx: dx, dy: dy, speed: 55 + Math.random() * 30, col: Math.random() < .66 ? gold : blue, pts: [[x, y]], age: 0 };
   }
   function step(c, dt) {
     var d = c.speed * dt, horiz = c.dx !== 0, dir = horiz ? c.dx : c.dy, p = horiz ? c.x : c.y, np = p + dir * d;
