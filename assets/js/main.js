@@ -191,7 +191,7 @@
 
   /* ---------- hero: calm light-cycle grid ---------- */
   var cv = $('#grid'); if (!cv) return;
-  var ctx = cv.getContext('2d'), W = 0, H = 0, dpr = 1, cell = 64, cycles = [], gold = '255,199,38', blue = '77,134,255', line = '42,91,255';
+  var ctx = cv.getContext('2d'), W = 0, H = 0, dpr = 1, cell = 64, cycles = [], gold = '255,199,38', blue = '35,87,224', line = '42,91,255';
   var gridLayer = document.createElement('canvas'), visible = true, last = 0, nextSpawn = 0, TRAIL = 340;
   function readColors() {
     var cs = getComputedStyle(document.documentElement), g = cs.getPropertyValue('--a-rgb').trim(), b = cs.getPropertyValue('--g-rgb').trim(), l = cs.getPropertyValue('--b-rgb').trim();
