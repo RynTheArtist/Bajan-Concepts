@@ -1,0 +1,42 @@
+# Auto-deploy: every push to main uploads the site to Spaceship (cPanel) over FTPS.
+# Credentials live in GitHub > Settings > Secrets and variables > Actions (never in this repo):
+#   FTP_SERVER, FTP_USERNAME, FTP_PASSWORD
+name: Deploy to bajanconcepts.net
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:        # lets you re-run it manually from the Actions tab
+
+concurrency:
+  group: deploy-live
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: PHP syntax check (a broken quote.php would take the form down)
+        run: php -l quote.php
+
+      - name: Upload to server
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          server-dir: ./            # the FTP account's home IS the document root
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .github/**
+            README.md
+            _data/**
+            **/node_modules/**
