@@ -189,57 +189,83 @@
       });
   });
 
-  /* ---------- hero: light-cycle grid ---------- */
+  /* ---------- hero: calm light-cycle grid ---------- */
   var cv = $('#grid'); if (!cv) return;
-  var ctx = cv.getContext('2d'), W, H, dpr, cell = 56, cycles = [], rgb = '255,199,38', brgb = '42,91,255', visible = true, last = 0;
-  function readRGB() { var v = getComputedStyle(document.documentElement).getPropertyValue('--a-rgb').trim(); if (v) rgb = v; var b = getComputedStyle(document.documentElement).getPropertyValue('--b-rgb').trim(); if (b) brgb = b; }
+  var ctx = cv.getContext('2d'), W = 0, H = 0, dpr = 1, cell = 64, cycles = [], gold = '255,199,38', blue = '77,134,255', line = '42,91,255';
+  var gridLayer = document.createElement('canvas'), visible = true, last = 0, nextSpawn = 0, TRAIL = 340;
+  function readColors() {
+    var cs = getComputedStyle(document.documentElement), g = cs.getPropertyValue('--a-rgb').trim(), b = cs.getPropertyValue('--g-rgb').trim(), l = cs.getPropertyValue('--b-rgb').trim();
+    if (g) gold = g; if (b) blue = b; if (l) line = l;
+  }
+  function buildGrid() {
+    gridLayer.width = W * dpr; gridLayer.height = H * dpr;
+    var g = gridLayer.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, H);
+    g.strokeStyle = 'rgba(' + line + ',.13)'; g.lineWidth = 1; g.beginPath();
+    for (var x = 0; x <= W; x += cell) { g.moveTo(x + .5, 0); g.lineTo(x + .5, H); }
+    for (var y = 0; y <= H; y += cell) { g.moveTo(0, y + .5); g.lineTo(W, y + .5); }
+    g.stroke();
+  }
   function size() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
-    W = cv.clientWidth; H = cv.clientHeight; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    cell = W < 700 ? 44 : 56;
-    drawGrid();
+    W = cv.clientWidth; H = cv.clientHeight; cv.width = W * dpr; cv.height = H * dpr;
+    cell = W < 700 ? 48 : 64; buildGrid(); paint();
   }
-  function drawGrid() {
-    ctx.clearRect(0, 0, W, H);
-    ctx.strokeStyle = 'rgba(' + brgb + ',.16)'; ctx.lineWidth = 1; ctx.beginPath();
-    for (var x = 0; x <= W; x += cell) { ctx.moveTo(x + .5, 0); ctx.lineTo(x + .5, H); }
-    for (var y = 0; y <= H; y += cell) { ctx.moveTo(0, y + .5); ctx.lineTo(W, y + .5); }
-    ctx.stroke();
-  }
+  function paint() { ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height); ctx.drawImage(gridLayer, 0, 0); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
   function spawn() {
-    var cols = Math.ceil(W / cell), rows = Math.ceil(H / cell), horiz = Math.random() < .5;
-    return { x: Math.floor(Math.random() * cols) * cell, y: Math.floor(Math.random() * rows) * cell,
-      dx: horiz ? (Math.random() < .5 ? 1 : -1) : 0, dy: horiz ? 0 : (Math.random() < .5 ? 1 : -1),
-      gold: Math.random() < .5, sp: 140 + Math.random() * 160, trail: [], turn: 2 + Math.floor(Math.random() * 6), life: 6 + Math.random() * 6 };
+    var side = Math.floor(Math.random() * 4), cols = Math.floor(W / cell), rows = Math.floor(H / cell), x, y, dx = 0, dy = 0;
+    if (side === 0) { x = -8; y = (1 + Math.floor(Math.random() * Math.max(1, rows - 1))) * cell; dx = 1; }
+    else if (side === 1) { x = W + 8; y = (1 + Math.floor(Math.random() * Math.max(1, rows - 1))) * cell; dx = -1; }
+    else if (side === 2) { y = -8; x = (1 + Math.floor(Math.random() * Math.max(1, cols - 1))) * cell; dy = 1; }
+    else { y = H + 8; x = (1 + Math.floor(Math.random() * Math.max(1, cols - 1))) * cell; dy = -1; }
+    return { x: x, y: y, dx: dx, dy: dy, speed: 55 + Math.random() * 30, col: Math.random() < .28 ? gold : blue, pts: [[x, y]], age: 0 };
+  }
+  function step(c, dt) {
+    var d = c.speed * dt, horiz = c.dx !== 0, dir = horiz ? c.dx : c.dy, p = horiz ? c.x : c.y, np = p + dir * d;
+    var a = Math.floor(p / cell), b = Math.floor(np / cell);
+    if (a !== b && p > 0 && np > 0) {
+      var L = (dir > 0 ? b : a) * cell;
+      if (horiz) c.x = L; else c.y = L;
+      var onScreen = c.x > cell && c.x < W - cell && c.y > cell && c.y < H - cell;
+      if (onScreen && Math.random() < .22) {
+        c.pts.push([c.x, c.y]);
+        var nd = Math.random() < .5 ? 1 : -1;
+        if (horiz) { c.dx = 0; c.dy = nd; } else { c.dy = 0; c.dx = nd; }
+        return;
+      }
+    }
+    c.x += c.dx * d; c.y += c.dy * d;
+  }
+  function drawCycle(c) {
+    var pts = c.pts.concat([[c.x, c.y]]), dist = 0, fade = Math.min(1, c.age / 1.6), col = c.col;
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    for (var i = pts.length - 1; i > 0 && dist < TRAIL; i--) {
+      var x1 = pts[i][0], y1 = pts[i][1], x0 = pts[i - 1][0], y0 = pts[i - 1][1], len = Math.hypot(x1 - x0, y1 - y0);
+      var use = Math.min(len, TRAIL - dist), tx = x1 + (x0 - x1) * (use / (len || 1)), ty = y1 + (y0 - y1) * (use / (len || 1));
+      var g = ctx.createLinearGradient(x1, y1, tx, ty), a1 = (1 - dist / TRAIL) * fade, a2 = (1 - (dist + use) / TRAIL) * fade;
+      g.addColorStop(0, 'rgba(' + col + ',' + a1 * .95 + ')'); g.addColorStop(1, 'rgba(' + col + ',' + Math.max(0, a2) * .95 + ')');
+      ctx.strokeStyle = 'rgba(' + col + ',' + a1 * .12 + ')'; ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(tx, ty); ctx.stroke(); /* soft halo */
+      ctx.strokeStyle = g; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(tx, ty); ctx.stroke();
+      dist += use;
+    }
+    ctx.fillStyle = 'rgba(' + col + ',' + (.95 * fade) + ')'; ctx.fillRect(c.x - 2, c.y - 2, 4, 4);
   }
   function frame(t) {
     requestAnimationFrame(frame);
     if (!visible) { last = t; return; }
-    var dt = Math.min(.05, (t - last) / 1000); last = t;
-    drawGrid();
-    if (cycles.length < (W < 700 ? 4 : 7) && Math.random() < .03) cycles.push(spawn());
+    var dt = Math.min(.04, (t - last) / 1000); last = t;
+    paint();
+    var max = W < 700 ? 2 : 4;
+    if (cycles.length < max && t > nextSpawn) { cycles.push(spawn()); nextSpawn = t + 2200 + Math.random() * 2500; }
     cycles = cycles.filter(function (c) {
-      var d = c.sp * dt; c.x += c.dx * d; c.y += c.dy * d; c.life -= dt;
-      var last = c.trail[c.trail.length - 1];
-      if (!last) c.trail.push([c.x, c.y]);
-      else {
-        var gx = Math.round(c.x / cell) * cell, gy = Math.round(c.y / cell) * cell;
-        if (c.dx && Math.abs(c.x - gx) < d && --c.turn <= 0) { c.x = gx; c.dy = Math.random() < .5 ? 1 : -1; c.dx = 0; c.turn = 2 + Math.floor(Math.random() * 6); c.trail.push([c.x, c.y]); }
-        else if (c.dy && Math.abs(c.y - gy) < d && --c.turn <= 0) { c.y = gy; c.dx = Math.random() < .5 ? 1 : -1; c.dy = 0; c.turn = 2 + Math.floor(Math.random() * 6); c.trail.push([c.x, c.y]); }
-      }
-      if (c.trail.length > 14) c.trail.shift();
-      var pts = c.trail.concat([[c.x, c.y]]);
-      var g = ctx.createLinearGradient(pts[0][0], pts[0][1], c.x, c.y);
-      var col = c.gold ? rgb : brgb;
-      g.addColorStop(0, 'rgba(' + col + ',0)'); g.addColorStop(1, 'rgba(' + col + ',.95)');
-      ctx.strokeStyle = g; ctx.lineWidth = 2.5; ctx.shadowColor = 'rgb(' + col + ')'; ctx.shadowBlur = 14; ctx.lineJoin = 'miter';
-      ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); for (var i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]); ctx.stroke(); ctx.shadowBlur = 0;
-      return c.life > 0 && c.x > -40 && c.x < W + 40 && c.y > -40 && c.y < H + 40;
+      c.age += dt; step(c, dt);
+      var out = c.x < -TRAIL - 60 || c.x > W + TRAIL + 60 || c.y < -TRAIL - 60 || c.y > H + TRAIL + 60;
+      if (!out) drawCycle(c);
+      return !out;
     });
   }
-  readRGB(); size();
-  window.addEventListener('resize', function () { size(); });
-  new MutationObserver(function () { readRGB(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  readColors(); size();
+  var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(size, 150); });
+  new MutationObserver(function () { readColors(); buildGrid(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }).observe($('#hero'));
   if (!reduce) requestAnimationFrame(frame);
 })();
