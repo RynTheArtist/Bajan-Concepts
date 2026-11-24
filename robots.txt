@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /_data/
+
+Sitemap: https://www.bajanconcepts.net/sitemap.xml
