@@ -85,11 +85,33 @@
       </ul>
     </div>
     <div class="hero-visual reveal" style="--d:.2s">
-      <div class="frame tilt">
-        <img src="assets/img/decepticon-r6-side-sm.webp" srcset="assets/img/decepticon-r6-side-sm.webp 640w, assets/img/decepticon-r6-side.webp 1400w" sizes="(min-width:900px) 46vw, 92vw" width="640" height="480" alt="Decepticon-themed airbrushed sport bike by Bajan Concepts" fetchpriority="high">
+      <div class="frame tilt hero-frame" id="hframe" aria-roledescription="carousel" aria-label="Featured builds">
+        <div class="hslides">
+          <div class="hslide on" data-title="Decepticon" role="group" aria-roledescription="slide" aria-label="1 of 5">
+            <img src="assets/img/decepticon-r6-side-sm.webp" srcset="assets/img/decepticon-r6-side-sm.webp 640w, assets/img/decepticon-r6-side.webp 1400w" sizes="(min-width:900px) 46vw, 92vw" width="640" height="403" style="object-position:50% 50%" alt="Decepticon-themed airbrushed sport bike by Bajan Concepts" fetchpriority="high" decoding="async">
+          </div>
+          <div class="hslide" data-title="Afro Samurai R1" role="group" aria-roledescription="slide" aria-label="2 of 5" aria-hidden="true">
+            <img src="assets/img/samurai-r1-sm.webp" srcset="assets/img/samurai-r1-sm.webp 640w, assets/img/samurai-r1.webp 1400w" sizes="(min-width:900px) 46vw, 92vw" width="640" height="480" style="object-position:50% 60%" alt="Black R1 with Afro Samurai airbrush and katana display" loading="lazy" decoding="async">
+          </div>
+          <div class="hslide" data-title="Biomechanical GSX-R" role="group" aria-roledescription="slide" aria-label="3 of 5" aria-hidden="true">
+            <img src="assets/img/bio-gsxr-side-sm.webp" srcset="assets/img/bio-gsxr-side-sm.webp 640w, assets/img/bio-gsxr-side.webp 1400w" sizes="(min-width:900px) 46vw, 92vw" width="640" height="368" style="object-position:50% 50%" alt="Biomechanical green and gunmetal airbrush on a Suzuki sport bike" loading="lazy" decoding="async">
+          </div>
+          <div class="hslide" data-title="Boondocks" role="group" aria-roledescription="slide" aria-label="4 of 5" aria-hidden="true">
+            <img src="assets/img/boondocks-tank-sm.webp" srcset="assets/img/boondocks-tank-sm.webp 640w, assets/img/boondocks-tank.webp 1400w" sizes="(min-width:900px) 46vw, 92vw" width="640" height="383" style="object-position:50% 50%" alt="Airbrushed Boondocks character art on a motorcycle tank" loading="lazy" decoding="async">
+          </div>
+          <div class="hslide" data-title="Decepticon - Front" role="group" aria-roledescription="slide" aria-label="5 of 5" aria-hidden="true">
+            <img src="assets/img/decepticon-r6-front-sm.webp" srcset="assets/img/decepticon-r6-front-sm.webp 640w, assets/img/decepticon-r6-front.webp 1400w" sizes="(min-width:900px) 46vw, 92vw" width="640" height="432" style="object-position:50% 55%" alt="Front view of the Decepticon airbrushed fairing" loading="lazy" decoding="async">
+          </div>
+        </div>
         <span class="scan" aria-hidden="true"></span>
         <i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
-        <div class="tag"><b>Build 01</b> Decepticon</div>
+        <div class="tag" aria-live="polite"><b id="hnum">Build 01</b> <span id="hname">Decepticon</span></div>
+        <div class="hctl">
+          <button type="button" class="hbtn" id="hprev" aria-label="Previous build">&lsaquo;</button>
+          <span class="hdots" id="hdots" role="tablist" aria-label="Choose build"><button type="button" role="tab" aria-label="Build 1" class="on" aria-selected="true"></button><button type="button" role="tab" aria-label="Build 2" aria-selected="false"></button><button type="button" role="tab" aria-label="Build 3" aria-selected="false"></button><button type="button" role="tab" aria-label="Build 4" aria-selected="false"></button><button type="button" role="tab" aria-label="Build 5" aria-selected="false"></button></span>
+          <button type="button" class="hbtn" id="hnext" aria-label="Next build">&rsaquo;</button>
+        </div>
+        <span class="hprog" aria-hidden="true"><i></i></span>
       </div>
     </div>
   </div>

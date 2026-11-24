@@ -87,8 +87,8 @@ h1{font-size:clamp(2.3rem,5.6vw,4.6rem);font-weight:900;margin-bottom:24px}
 .chips li::before{content:"◆";color:var(--a);margin-right:9px;font-size:.7em;vertical-align:.12em}
 .hero-visual{position:relative}
 .frame{position:relative;border-radius:2px;background:#000;box-shadow:0 0 0 1px rgba(var(--g-rgb),.45),0 0 56px rgba(var(--g-rgb),.3),0 30px 80px rgba(0,0,0,.6);transform-style:preserve-3d;transition:transform .25s ease-out;overflow:hidden}
-.frame img{width:100%;aspect-ratio:4/3;object-fit:cover}
-.frame.small img{aspect-ratio:3/4}
+.frame>img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.frame.small>img{aspect-ratio:3/4}
 .frame .c{position:absolute;width:26px;height:26px;border:2px solid var(--a);filter:drop-shadow(0 0 6px var(--a));pointer-events:none}
 .c.tl{top:8px;left:8px;border-right:0;border-bottom:0}.c.tr{top:8px;right:8px;border-left:0;border-bottom:0}
 .c.bl{bottom:8px;left:8px;border-right:0;border-top:0}.c.br{bottom:8px;right:8px;border-left:0;border-top:0}
@@ -324,3 +324,23 @@ textarea{resize:vertical;min-height:120px}
 .stats{position:relative}
 .stat{border-image:linear-gradient(180deg,#2a5bff,#ffc726) 1}
 .steps li{border-top-color:rgba(var(--b-rgb),.8)}
+
+/* Hero build carousel */
+.hslides{position:relative;aspect-ratio:4/3;background:#000}
+.hslide{position:absolute;inset:0;opacity:0;transition:opacity .9s ease,transform 1.2s ease;transform:scale(1.04)}
+.hslide.on{opacity:1;transform:none;z-index:1}
+.hslide img{width:100%;height:100%;object-fit:cover}
+.hero-frame .tag{z-index:3}
+.hctl{position:absolute;right:14px;top:14px;z-index:3;display:flex;align-items:center;gap:8px;background:rgba(2,6,15,.8);padding:6px 8px;border-right:3px solid var(--a)}
+.hbtn{width:34px;height:34px;font:400 1.7rem/1 var(--fb);color:var(--txt);display:grid;place-items:center;transition:.2s}
+.hbtn:hover{color:var(--a);text-shadow:0 0 10px var(--a)}
+.hdots{display:flex;gap:7px}
+.hdots button{width:22px;height:22px;position:relative}
+.hdots button::before{content:"";position:absolute;left:3px;right:3px;top:50%;height:3px;margin-top:-1.5px;background:rgba(255,255,255,.3);transition:.3s}
+.hdots button.on::before{background:var(--a);box-shadow:0 0 8px var(--a)}
+.hprog{position:absolute;left:0;right:0;bottom:0;height:3px;z-index:3;background:rgba(255,255,255,.08)}
+.hprog i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--g2),var(--g));transform:scaleX(0);transform-origin:left;box-shadow:0 0 10px var(--g)}
+.hero-frame.run .hprog i{animation:hprog var(--dur,5.5s) linear forwards}
+.hero-frame.paused .hprog i{animation-play-state:paused}
+@keyframes hprog{to{transform:scaleX(1)}}
+@media (max-width:620px){.hctl{right:10px;top:10px;gap:2px;padding:4px 6px}.hbtn{width:30px;height:30px}.hdots button{width:16px}.tag{font-size:.68rem;padding:6px 10px}}

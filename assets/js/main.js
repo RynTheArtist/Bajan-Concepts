@@ -189,6 +189,38 @@
       });
   });
 
+  /* ---------- hero build carousel ---------- */
+  (function () {
+    var frame = $('#hframe'); if (!frame) return;
+    var slides = $$('.hslide', frame), dots = $$('#hdots button', frame), name = $('#hname'), num = $('#hnum'), i = 0, timer = null, DUR = 5500;
+    frame.style.setProperty('--dur', DUR + 'ms');
+    function show(n) {
+      i = (n + slides.length) % slides.length;
+      slides.forEach(function (s, k) { s.classList.toggle('on', k === i); s.setAttribute('aria-hidden', k === i ? 'false' : 'true'); });
+      dots.forEach(function (d, k) { d.classList.toggle('on', k === i); d.setAttribute('aria-selected', k === i ? 'true' : 'false'); });
+      num.textContent = 'Build 0' + (i + 1); name.textContent = slides[i].dataset.title;
+      restart();
+    }
+    function restart() {
+      clearInterval(timer); frame.classList.remove('run'); void frame.offsetWidth;
+      if (reduce || frame.classList.contains('paused')) return;
+      frame.classList.add('run'); timer = setInterval(function () { show(i + 1); }, DUR);
+    }
+    function pause() { frame.classList.add('paused'); clearInterval(timer); }
+    function resume() { frame.classList.remove('paused'); restart(); }
+    $('#hnext', frame).addEventListener('click', function () { show(i + 1); });
+    $('#hprev', frame).addEventListener('click', function () { show(i - 1); });
+    dots.forEach(function (d, k) { d.addEventListener('click', function () { show(k); }); });
+    frame.addEventListener('mouseenter', pause); frame.addEventListener('mouseleave', resume);
+    frame.addEventListener('focusin', pause); frame.addEventListener('focusout', resume);
+    frame.addEventListener('keydown', function (e) { if (e.key === 'ArrowRight') show(i + 1); if (e.key === 'ArrowLeft') show(i - 1); });
+    var sx = 0;
+    frame.addEventListener('touchstart', function (e) { sx = e.changedTouches[0].clientX; }, { passive: true });
+    frame.addEventListener('touchend', function (e) { var d = e.changedTouches[0].clientX - sx; if (Math.abs(d) > 40) show(i + (d < 0 ? 1 : -1)); });
+    document.addEventListener('visibilitychange', function () { if (document.hidden) pause(); else resume(); });
+    restart();
+  })();
+
   /* ---------- hero: calm light-cycle grid ---------- */
   var cv = $('#grid'); if (!cv) return;
   var ctx = cv.getContext('2d'), W = 0, H = 0, dpr = 1, cell = 64, cycles = [], gold = '255,199,38', blue = '35,87,224', line = '42,91,255';
