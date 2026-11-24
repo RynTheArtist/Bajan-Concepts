@@ -191,8 +191,8 @@
 
   /* ---------- hero: light-cycle grid ---------- */
   var cv = $('#grid'); if (!cv) return;
-  var ctx = cv.getContext('2d'), W, H, dpr, cell = 56, cycles = [], rgb = '25,227,255', visible = true, last = 0;
-  function readRGB() { var v = getComputedStyle(document.documentElement).getPropertyValue('--a-rgb').trim(); if (v) rgb = v; }
+  var ctx = cv.getContext('2d'), W, H, dpr, cell = 56, cycles = [], rgb = '255,199,38', brgb = '42,91,255', visible = true, last = 0;
+  function readRGB() { var v = getComputedStyle(document.documentElement).getPropertyValue('--a-rgb').trim(); if (v) rgb = v; var b = getComputedStyle(document.documentElement).getPropertyValue('--b-rgb').trim(); if (b) brgb = b; }
   function size() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     W = cv.clientWidth; H = cv.clientHeight; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -201,7 +201,7 @@
   }
   function drawGrid() {
     ctx.clearRect(0, 0, W, H);
-    ctx.strokeStyle = 'rgba(' + rgb + ',.07)'; ctx.lineWidth = 1; ctx.beginPath();
+    ctx.strokeStyle = 'rgba(' + brgb + ',.16)'; ctx.lineWidth = 1; ctx.beginPath();
     for (var x = 0; x <= W; x += cell) { ctx.moveTo(x + .5, 0); ctx.lineTo(x + .5, H); }
     for (var y = 0; y <= H; y += cell) { ctx.moveTo(0, y + .5); ctx.lineTo(W, y + .5); }
     ctx.stroke();
@@ -210,7 +210,7 @@
     var cols = Math.ceil(W / cell), rows = Math.ceil(H / cell), horiz = Math.random() < .5;
     return { x: Math.floor(Math.random() * cols) * cell, y: Math.floor(Math.random() * rows) * cell,
       dx: horiz ? (Math.random() < .5 ? 1 : -1) : 0, dy: horiz ? 0 : (Math.random() < .5 ? 1 : -1),
-      sp: 140 + Math.random() * 160, trail: [], turn: 2 + Math.floor(Math.random() * 6), life: 6 + Math.random() * 6 };
+      gold: Math.random() < .5, sp: 140 + Math.random() * 160, trail: [], turn: 2 + Math.floor(Math.random() * 6), life: 6 + Math.random() * 6 };
   }
   function frame(t) {
     requestAnimationFrame(frame);
@@ -230,8 +230,9 @@
       if (c.trail.length > 14) c.trail.shift();
       var pts = c.trail.concat([[c.x, c.y]]);
       var g = ctx.createLinearGradient(pts[0][0], pts[0][1], c.x, c.y);
-      g.addColorStop(0, 'rgba(' + rgb + ',0)'); g.addColorStop(1, 'rgba(' + rgb + ',.95)');
-      ctx.strokeStyle = g; ctx.lineWidth = 2.5; ctx.shadowColor = 'rgb(' + rgb + ')'; ctx.shadowBlur = 14; ctx.lineJoin = 'miter';
+      var col = c.gold ? rgb : brgb;
+      g.addColorStop(0, 'rgba(' + col + ',0)'); g.addColorStop(1, 'rgba(' + col + ',.95)');
+      ctx.strokeStyle = g; ctx.lineWidth = 2.5; ctx.shadowColor = 'rgb(' + col + ')'; ctx.shadowBlur = 14; ctx.lineJoin = 'miter';
       ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); for (var i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]); ctx.stroke(); ctx.shadowBlur = 0;
       return c.life > 0 && c.x > -40 && c.x < W + 40 && c.y > -40 && c.y < H + 40;
     });

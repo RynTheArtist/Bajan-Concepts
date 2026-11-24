@@ -1,18 +1,20 @@
 /* Bajan Concepts — Grid / Cybertron theme */
 :root{
-  --bg:#03060b; --bg2:#070d17; --panel:rgba(10,20,34,.66); --line:rgba(255,255,255,.09);
+  --bg:#02060f; --bg2:#06101f; --panel:rgba(10,20,34,.66); --line:rgba(255,255,255,.09);
   --txt:#e8f1f8; --mut:#9db0c2;
-  --a:#19e3ff; --a2:#1a7dff; --a-rgb:25,227,255; --on-a:#021018;
+  --a:#ffc726; --a2:#ff9f0a; --a-rgb:255,199,38; --on-a:#0b0a00;
+  --b:#2a5bff; --b-rgb:42,91,255; --ultra:#00267f;
   --fd:'Orbitron',system-ui,sans-serif; --fb:'Rajdhani',system-ui,sans-serif;
   --r:14px; --cut:18px;
 }
-:root[data-theme="rogue"]{--a:#ff7a1a;--a2:#ffb347;--a-rgb:255,122,26;--on-a:#1a0a00}
-:root[data-theme="decept"]{--a:#b66bff;--a2:#ff3d81;--a-rgb:182,107,255;--on-a:#0d0316}
+:root[data-theme="grid"]{--a:#19e3ff;--a2:#1a7dff;--a-rgb:25,227,255;--b:#1a7dff;--b-rgb:26,125,255;--on-a:#021018}
+:root[data-theme="rogue"]{--a:#ff7a1a;--a2:#ffb347;--a-rgb:255,122,26;--b:#ffb347;--b-rgb:255,179,71;--on-a:#1a0a00}
+:root[data-theme="decept"]{--a:#b66bff;--a2:#ff3d81;--a-rgb:182,107,255;--b:#ff3d81;--b-rgb:255,61,129;--on-a:#0d0316}
 
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;scroll-padding-top:84px;-webkit-text-size-adjust:100%}
 body{background:var(--bg);color:var(--txt);font:500 1.125rem/1.6 var(--fb);overflow-x:hidden;min-height:100vh;
-  background-image:radial-gradient(1200px 600px at 80% -10%,rgba(var(--a-rgb),.08),transparent 60%),radial-gradient(900px 500px at -10% 40%,rgba(var(--a-rgb),.05),transparent 60%)}
+  background-image:radial-gradient(1200px 600px at 80% -10%,rgba(var(--b-rgb),.16),transparent 60%),radial-gradient(900px 500px at -10% 40%,rgba(var(--b-rgb),.10),transparent 60%)}
 img{max-width:100%;height:auto;display:block}
 a{color:inherit;text-decoration:none}
 ul,ol{list-style:none}
@@ -52,9 +54,9 @@ h1,h2,h3{font-family:var(--fd);line-height:1.1;letter-spacing:.01em;text-wrap:ba
 .nav a:not(.btn):hover{color:#fff}.nav a:not(.btn):hover::after{transform:scaleX(1)}
 .theme{display:flex;gap:7px;padding-left:6px}
 .theme button{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.35);transition:transform .2s,box-shadow .2s}
-.theme button[data-set=grid]{background:#19e3ff}.theme button[data-set=rogue]{background:#ff7a1a}.theme button[data-set=decept]{background:#b66bff}
+.theme button[data-set=bajan]{background:linear-gradient(90deg,#00267f 33%,#ffc726 33% 66%,#00267f 66%)}.theme button[data-set=grid]{background:#19e3ff}.theme button[data-set=rogue]{background:#ff7a1a}.theme button[data-set=decept]{background:#b66bff}
 .theme button:hover{transform:scale(1.25)}
-:root:not([data-theme]) .theme [data-set=grid],:root[data-theme=grid] .theme [data-set=grid],:root[data-theme=rogue] .theme [data-set=rogue],:root[data-theme=decept] .theme [data-set=decept]{border-color:#fff;box-shadow:0 0 12px currentColor}
+:root:not([data-theme]) .theme [data-set=bajan],:root[data-theme=bajan] .theme [data-set=bajan],:root[data-theme=grid] .theme [data-set=grid],:root[data-theme=rogue] .theme [data-set=rogue],:root[data-theme=decept] .theme [data-set=decept]{border-color:#fff;box-shadow:0 0 12px currentColor}
 .burger{display:none;width:44px;height:44px;margin-left:auto;flex-direction:column;justify-content:center;gap:6px;align-items:center}
 .burger span{width:24px;height:2px;background:var(--txt);transition:.3s}
 .burger[aria-expanded=true] span:nth-child(1){transform:translateY(8px) rotate(45deg)}
@@ -68,7 +70,7 @@ h1,h2,h3{font-family:var(--fd);line-height:1.1;letter-spacing:.01em;text-wrap:ba
 .floor{position:absolute;left:-50%;right:-50%;bottom:-2px;height:34%;z-index:-2;perspective:420px;pointer-events:none;
   mask-image:linear-gradient(180deg,transparent,#000 55%);-webkit-mask-image:linear-gradient(180deg,transparent,#000 55%)}
 .floor::before{content:"";position:absolute;inset:-100% 0 0;transform:rotateX(68deg);transform-origin:50% 100%;
-  background-image:linear-gradient(rgba(var(--a-rgb),.55) 1.5px,transparent 1.5px),linear-gradient(90deg,rgba(var(--a-rgb),.55) 1.5px,transparent 1.5px);
+  background-image:linear-gradient(rgba(var(--b-rgb),.75) 1.5px,transparent 1.5px),linear-gradient(90deg,rgba(var(--b-rgb),.75) 1.5px,transparent 1.5px);
   background-size:70px 70px;animation:floor 2.2s linear infinite}
 @keyframes floor{to{background-position:0 70px}}
 .hero-in{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(24px,5vw,70px);align-items:center}
@@ -305,3 +307,17 @@ textarea{resize:vertical;min-height:120px}
   *,*::before,*::after{animation:none!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
   .js .reveal{opacity:1;transform:none}
 }
+
+/* Barbados flag motifs */
+.flagbar{height:5px;background:linear-gradient(90deg,#00267f 0 33.33%,#ffc726 33.33% 66.66%,#00267f 66.66%);box-shadow:0 0 18px rgba(255,199,38,.35)}
+:root[data-theme]:not([data-theme=bajan]) .flagbar{background:linear-gradient(90deg,var(--b),var(--a),var(--b));box-shadow:0 0 18px rgba(var(--a-rgb),.35)}
+.site-header .flagbar{position:absolute;inset:0 0 auto}
+.flag-badge{display:inline-flex;align-items:center;gap:10px;font:600 .8rem var(--fb);letter-spacing:.22em;text-transform:uppercase;color:var(--mut)}
+.flag-badge img{width:36px;height:24px;box-shadow:0 0 0 1px rgba(255,255,255,.25),0 0 14px rgba(42,91,255,.6)}
+.flag-frame{position:relative;display:block;width:min(260px,52%);margin:0 0 22px}
+.flag-frame img{width:100%;aspect-ratio:3/2;box-shadow:0 0 0 1px rgba(255,255,255,.2),0 0 40px rgba(42,91,255,.55),0 0 80px rgba(255,199,38,.15);animation:wave 6s ease-in-out infinite}
+@keyframes wave{50%{transform:perspective(600px) rotateY(-6deg) rotateX(2deg)}}
+.stats{position:relative}
+.stat{border-image:linear-gradient(180deg,#2a5bff,#ffc726) 1}
+.btn-ghost{box-shadow:inset 0 0 0 1.5px rgba(var(--a-rgb),.7)}
+.steps li{border-top-color:rgba(var(--b-rgb),.8)}
