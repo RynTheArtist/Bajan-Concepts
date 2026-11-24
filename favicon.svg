@@ -1,1 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="190 56 470 540"><defs><path id="hexagon" d="M424 76 640 202V455L424 580 209 455V202Z"/><clipPath id="badge"><use href="#hexagon"/></clipPath><linearGradient id="rim" gradientUnits="userSpaceOnUse" x1="209" y1="0" x2="640" y2="0"><stop offset="0" stop-color="#008AFF"/><stop offset=".2784" stop-color="#008AFF"/><stop offset=".2784" stop-color="#FFEB85"/><stop offset=".7193" stop-color="#FFEB85"/><stop offset=".7193" stop-color="#008AFF"/><stop offset="1" stop-color="#008AFF"/></linearGradient></defs><g stroke-linejoin="round"><g clip-path="url(#badge)"><path fill="#09088C" d="M195 65H655V592H195Z"/><path fill="#FFC300" d="M329 65H519V592H329Z"/></g><use href="#hexagon" fill="none" stroke="url(#rim)" stroke-width="16"/></g><path fill="#080707" d="M424 146C433 169 439 188 453 208L437 205V299L459 302C463 273 468 244 479 219L467 220C479 207 502 196 519 193C500 218 478 276 475 328L437 322V506H412V322L373 328C370 276 348 218 329 193C346 196 369 207 381 220L369 219C380 244 385 273 390 302L412 299V205L395 208C409 188 415 169 424 146Z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Bajan Concepts">
+  <defs>
+    <clipPath id="badge"><path d="M32 4 56 18v28L32 60 8 46V18Z"/></clipPath>
+    <linearGradient id="rim" gradientUnits="userSpaceOnUse" x1="8" x2="56">
+      <stop offset=".30" stop-color="#158EFF"/>
+      <stop offset=".30" stop-color="#FFF099"/>
+      <stop offset=".70" stop-color="#FFF099"/>
+      <stop offset=".70" stop-color="#158EFF"/>
+    </linearGradient>
+  </defs>
+  <g clip-path="url(#badge)">
+    <path d="M0 0h64v64H0Z" fill="#09088C"/>
+    <path d="M22.4 0h19.2v64H22.4Z" fill="#FFC300"/>
+  </g>
+  <path d="M32 4 56 18v28L32 60 8 46V18Z" fill="none" stroke="url(#rim)" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M32 12c1 3 2.1 5.3 3.6 7.4l-2-.3v10.2l2.5.3c.4-3.1 1.1-6.2 2.4-9l-1.4.1c1.6-1.4 3.3-2.2 5.2-2.5-2.4 3-4.4 8.7-4.8 13.9l-3.9-.6V51h-3.2V31.5l-3.9.6c-.4-5.2-2.4-10.9-4.8-13.9 1.9.3 3.6 1.1 5.2 2.5l-1.4-.1c1.3 2.8 2 5.9 2.4 9l2.5-.3V19.1l-2 .3C29.9 17.3 31 15 32 12Z" fill="#080707"/>
+</svg>

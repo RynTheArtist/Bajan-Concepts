@@ -11,6 +11,8 @@ RewriteCond %{HTTP_HOST} ^bajanconcepts\.net$ [NC]
 RewriteRule ^ https://www.bajanconcepts.net%{REQUEST_URI} [L,R=301]
 # Never serve the quote backup folder
 RewriteRule ^_data(/|$) - [F,L]
+# Never serve the auto-deploy bookkeeping file
+RewriteRule ^\.ftp-deploy - [F,L]
 
 <IfModule mod_expires.c>
   ExpiresActive On
