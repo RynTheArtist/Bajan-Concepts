@@ -386,7 +386,7 @@
 
     <form class="qform reveal" id="qform" action="quote.php" method="post" enctype="multipart/form-data" novalidate style="--d:.1s">
       <div class="progress" aria-hidden="true"><i></i></div>
-      <ol class="crumbs" aria-hidden="true"><li class="on">Your project</li><li>Your vision</li><li>You</li></ol>
+      <ol class="crumbs" aria-hidden="true"><li class="on">Your project</li><li>Details</li><li>Your vision</li><li>You</li></ol>
 
       <fieldset class="step on" data-step="1">
         <legend>What do you want painted?</legend>
@@ -399,6 +399,11 @@
           <label><input type="checkbox" name="parts[]" value="Other"><span>Other</span></label>
         </div>
         <p class="pickerr" id="pickerr" role="alert" hidden></p>
+        <div class="nav-row"><span></span><button type="button" class="btn next" id="step1next">Next</button></div>
+      </fieldset>
+
+      <fieldset class="step" data-step="2">
+        <legend>Details</legend>
 
         <div class="qpanel" id="ridePanel">
           <p class="lbl">Tell us about your ride</p>
@@ -419,15 +424,16 @@
             <label><input type="checkbox" name="other_types[]" value="One-off pieces"><span>One-off pieces</span></label>
             <label><input type="checkbox" name="other_types[]" value="Something else"><span>Something else</span></label>
           </div>
-          <label class="odesc">Tell us what you have in mind
+          <label class="odesc" id="odesc">Tell us what you have in mind
             <input name="other_desc" id="otherDesc" maxlength="300" placeholder="e.g. Star Wars planter for my garage" autocomplete="off">
           </label>
         </div>
+        <p class="pickerr" id="detailerr" role="alert" hidden></p>
 
-        <div class="nav-row"><span></span><button type="button" class="btn next">Next</button></div>
+        <div class="nav-row"><button type="button" class="btn btn-ghost back">Back</button><button type="button" class="btn next">Next</button></div>
       </fieldset>
 
-      <fieldset class="step" data-step="2">
+      <fieldset class="step" data-step="3">
         <legend>Describe your vision</legend>
         <label>Theme / concept
           <textarea name="concept" rows="5" placeholder="e.g. Decepticon-style front end with silver chrome, tribute to my dad, comic characters..." required></textarea>
@@ -447,7 +453,7 @@
         <div class="nav-row"><button type="button" class="btn btn-ghost back">Back</button><button type="button" class="btn next">Next</button></div>
       </fieldset>
 
-      <fieldset class="step" data-step="3">
+      <fieldset class="step" data-step="4">
         <legend>How do we reach you?</legend>
         <div class="row2">
           <label>Your name<input name="name" autocomplete="name" required></label>
