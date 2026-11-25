@@ -131,7 +131,7 @@ h1{font-size:clamp(1.65rem,3.7vw,3.2rem);font-weight:900;margin-bottom:24px;line
 .card{--c:22px;position:relative;padding:34px 28px 30px;background:var(--panel);backdrop-filter:blur(8px);
   clip-path:polygon(var(--c) 0,100% 0,100% calc(100% - var(--c)),calc(100% - var(--c)) 100%,0 100%,0 var(--c));
   box-shadow:inset 0 0 0 1px var(--line);transition:transform .25s ease-out,box-shadow .3s;transform-style:preserve-3d}
-.card::before{content:"";position:absolute;inset:0;background:radial-gradient(300px 200px at var(--mx,50%) var(--my,0%),rgba(var(--g-rgb),.22),transparent 70%);opacity:0;transition:opacity .3s}
+.card::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(300px 200px at var(--mx,50%) var(--my,0%),rgba(var(--g-rgb),.22),transparent 70%);opacity:0;transition:opacity .3s}
 .card:hover{box-shadow:inset 0 0 0 1.5px rgba(var(--k-rgb),.85),0 0 30px rgba(var(--k-rgb),.18)}.card:hover::before{opacity:1}
 .ico{width:58px;height:58px;color:var(--a);margin-bottom:22px;filter:drop-shadow(0 0 8px rgba(var(--a-rgb),.6))}
 .card h3{font-size:1rem;font-weight:700;margin-bottom:12px;letter-spacing:.07em}
@@ -350,3 +350,15 @@ textarea{resize:vertical;min-height:120px}
 .hero-frame.paused .hprog i{animation-play-state:paused}
 @keyframes hprog{to{transform:scaleX(1)}}
 @media (max-width:620px){.hctl{right:10px;top:10px;gap:2px;padding:4px 6px}.hbtn{width:30px;height:30px}.hdots button{width:16px}.tag{font-size:.68rem;padding:6px 10px}}
+
+/* Service cards: whole card is the click target */
+.card .more::after{content:"";position:absolute;inset:0;z-index:2}
+.card:focus-within{box-shadow:inset 0 0 0 1.5px rgba(var(--k-rgb),.85)}
+
+/* Quote form: step 1 panels */
+.js .qpanel{display:none;margin-top:26px}
+.js .qpanel.on{display:block;animation:stepin .4s ease}
+.qpanel .lbl{color:var(--txt)}
+.odesc{margin-top:18px}
+.pick.bad span{border-color:#ff5470}
+.pickerr{margin-top:12px;color:#ff8da0;font-size:1rem}

@@ -141,14 +141,48 @@
     });
     return ok;
   }
-  $$('.next', form).forEach(function (b) { b.addEventListener('click', function () { if (valid(steps[cur])) go(cur + 1); }); });
+  $$('.next', form).forEach(function (b) { b.addEventListener('click', function () { if (check(cur)) go(cur + 1); }); });
   $$('.back', form).forEach(function (b) { b.addEventListener('click', function () { go(cur - 1); }); });
   $$('input,textarea', form).forEach(function (f) { f.addEventListener('input', function () { f.classList.remove('bad'); }); });
 
-  /* service cards pre-select parts */
+  /* step 1: what do you want painted? -> shows the matching questions */
+  var pickBox = $('#pick'), partBoxes = $$('input', pickBox), otherBox = $('input[value="Other"]', pickBox),
+      ridePanel = $('#ridePanel'), otherPanel = $('#otherPanel'), otherChips = $$('#otherPick input'),
+      otherDesc = $('#otherDesc'), pickErr = $('#pickerr'), makeI = $('[name=make]', form), modelI = $('[name=model]', form);
+  function bikeSelected() { return partBoxes.some(function (c) { return c !== otherBox && c.checked; }); }
+  function syncPanels(src) {
+    /* "Other" and the bike parts are mutually exclusive */
+    if (src === otherBox && otherBox.checked) partBoxes.forEach(function (c) { if (c !== otherBox) c.checked = false; });
+    else if (src && src !== otherBox && src.checked) otherBox.checked = false;
+    var bike = bikeSelected(), isOther = otherBox.checked;
+    ridePanel.classList.toggle('on', bike); otherPanel.classList.toggle('on', isOther);
+    makeI.required = bike; modelI.required = bike;
+    var something = otherChips.some(function (c) { return c.value === 'Something else' && c.checked; });
+    otherDesc.required = isOther && something;
+    pickBox.classList.remove('bad'); $('#otherPick').classList.remove('bad'); pickErr.hidden = true;
+  }
+  partBoxes.forEach(function (c) { c.addEventListener('change', function () { syncPanels(c); }); });
+  otherChips.forEach(function (c) { c.addEventListener('change', function () { syncPanels(null); }); });
+  function check(i) {
+    if (i === 0) {
+      var bike = bikeSelected(), isOther = otherBox.checked;
+      if (!bike && !isOther) { pickBox.classList.add('bad'); pickErr.textContent = 'Choose at least one option to continue.'; pickErr.hidden = false; return false; }
+      if (isOther && !otherChips.some(function (c) { return c.checked; }) && !otherDesc.value.trim()) {
+        $('#otherPick').classList.add('bad'); pickErr.textContent = 'Pick a type of piece, or tell us what you have in mind.'; pickErr.hidden = false; return false;
+      }
+    }
+    return valid(steps[i]);
+  }
+
+  /* service cards pre-select the matching option and open the right questions */
   $$('[data-pick]').forEach(function (a) {
     a.addEventListener('click', function () {
-      $$('#pick input').forEach(function (c) { c.checked = (c.value === a.dataset.pick); });
+      var want = a.dataset.pick.split(',');
+      partBoxes.forEach(function (c) { c.checked = want.indexOf(c.value) > -1; });
+      if (cur !== 0) go(0);
+      syncPanels(null);
+      var target = want[0] === 'Other' ? otherChips[0] : makeI;
+      setTimeout(function () { try { target.focus({ preventScroll: true }); } catch (e) {} }, 700);
     });
   });
 
@@ -166,9 +200,9 @@
   function say(html, err) { status.hidden = false; status.className = 'status' + (err ? ' err' : ''); status.innerHTML = html; status.scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' }); }
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    if (!valid(steps[cur])) return;
-    if (!valid(steps[0])) { go(0); return; }
-    if (!valid(steps[1])) { go(1); return; }
+    if (!check(cur)) return;
+    if (!check(0)) { go(0); return; }
+    if (!check(1)) { go(1); return; }
     send.disabled = true; var label = send.textContent; send.textContent = 'Sending…';
     var fd = new FormData(form);
     fetch(form.action, { method: 'POST', body: fd, headers: { 'Accept': 'application/json' } })

@@ -169,7 +169,7 @@
         <div class="ico"><svg viewBox="0 0 48 48"><path d="M6 30c0-10 7-18 18-18s18 8 18 18v4H6zM6 30h36M22 20h8" fill="none" stroke="currentColor" stroke-width="2.500"/></svg></div>
         <h3>Tanks &amp; Fairings</h3>
         <p>Characters, insignias, flames, biomechanical, portraits. Large-format airbrush on the panels everyone sees first.</p>
-        <a href="#quote" class="more" data-pick="Tank">Quote tank &amp; fairings →</a>
+        <a href="#quote" class="more" data-pick="Tank,Fairings">Quote tank &amp; fairings →</a>
       </article>
       <article class="card tilt reveal" style="--d:.16s">
         <div class="ico"><svg viewBox="0 0 48 48"><path d="M8 28c0-10 7-18 16-18s16 8 16 18v6H8zM8 28h22l8 6" fill="none" stroke="currentColor" stroke-width="2.500"/></svg></div>
@@ -181,7 +181,7 @@
         <div class="ico"><svg viewBox="0 0 48 48"><path d="M6 28c6-4 12-4 18 0s12 4 18 0v8c-6 4-12 4-18 0s-12-4-18 0zM12 24l4-8h16l4 8" fill="none" stroke="currentColor" stroke-width="2.500"/></svg></div>
         <h3>Seats, Wood &amp; Custom Art</h3>
         <p>Seat emblems, wood plaques, models, planters and one-off pieces — personalized art for the shop, the den or the wall.</p>
-        <a href="#quote" class="more" data-pick="Seat / other">Quote custom art →</a>
+        <a href="#quote" class="more" data-pick="Other">Quote custom art →</a>
       </article>
     </div>
   </div>
@@ -386,24 +386,44 @@
 
     <form class="qform reveal" id="qform" action="quote.php" method="post" enctype="multipart/form-data" novalidate style="--d:.1s">
       <div class="progress" aria-hidden="true"><i></i></div>
-      <ol class="crumbs" aria-hidden="true"><li class="on">Your ride</li><li>Your vision</li><li>You</li></ol>
+      <ol class="crumbs" aria-hidden="true"><li class="on">Your project</li><li>Your vision</li><li>You</li></ol>
 
       <fieldset class="step on" data-step="1">
-        <legend>Tell us about your ride</legend>
-        <div class="row3">
-          <label>Year<input name="year" inputmode="numeric" maxlength="4" placeholder="2019" autocomplete="off"></label>
-          <label>Make<input name="make" placeholder="Yamaha" autocomplete="off" required></label>
-          <label>Model<input name="model" placeholder="R6" autocomplete="off" required></label>
-        </div>
-        <p class="lbl">What do you want painted?</p>
-        <div class="pick" id="pick">
+        <legend>What do you want painted?</legend>
+        <div class="pick" id="pick" role="group" aria-label="What do you want painted?">
           <label><input type="checkbox" name="parts[]" value="Full bike"><span>Full bike</span></label>
           <label><input type="checkbox" name="parts[]" value="Tank"><span>Tank</span></label>
           <label><input type="checkbox" name="parts[]" value="Fairings"><span>Fairings</span></label>
           <label><input type="checkbox" name="parts[]" value="Fenders / tail"><span>Fenders / tail</span></label>
           <label><input type="checkbox" name="parts[]" value="Helmet"><span>Helmet</span></label>
-          <label><input type="checkbox" name="parts[]" value="Seat / other"><span>Seat / other</span></label>
+          <label><input type="checkbox" name="parts[]" value="Other"><span>Other</span></label>
         </div>
+        <p class="pickerr" id="pickerr" role="alert" hidden></p>
+
+        <div class="qpanel" id="ridePanel">
+          <p class="lbl">Tell us about your ride</p>
+          <div class="row3">
+            <label>Year<input name="year" inputmode="numeric" maxlength="4" placeholder="2019" autocomplete="off"></label>
+            <label>Make<input name="make" placeholder="Yamaha" autocomplete="off"></label>
+            <label>Model<input name="model" placeholder="R6" autocomplete="off"></label>
+          </div>
+        </div>
+
+        <div class="qpanel" id="otherPanel">
+          <p class="lbl">What kind of piece?</p>
+          <div class="pick" id="otherPick" role="group" aria-label="What kind of piece?">
+            <label><input type="checkbox" name="other_types[]" value="Seat emblems"><span>Seat emblems</span></label>
+            <label><input type="checkbox" name="other_types[]" value="Wood plaques"><span>Wood plaques</span></label>
+            <label><input type="checkbox" name="other_types[]" value="Models"><span>Models</span></label>
+            <label><input type="checkbox" name="other_types[]" value="Planters"><span>Planters</span></label>
+            <label><input type="checkbox" name="other_types[]" value="One-off pieces"><span>One-off pieces</span></label>
+            <label><input type="checkbox" name="other_types[]" value="Something else"><span>Something else</span></label>
+          </div>
+          <label class="odesc">Tell us what you have in mind
+            <input name="other_desc" id="otherDesc" maxlength="300" placeholder="e.g. Star Wars planter for my garage" autocomplete="off">
+          </label>
+        </div>
+
         <div class="nav-row"><span></span><button type="button" class="btn next">Next</button></div>
       </fieldset>
 

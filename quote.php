@@ -103,10 +103,17 @@ $budget = oneLine($_POST['budget']   ?? '', 40);
 $time   = oneLine($_POST['timeline'] ?? '', 40);
 $pref   = oneLine($_POST['contact_pref'] ?? 'Email', 20);
 $parts  = array_map(fn($p) => oneLine((string)$p, 40), (array)($_POST['parts'] ?? []));
+$isOther    = in_array('Other', $parts, true);
+$otherTypes = array_map(fn($p) => oneLine((string)$p, 40), array_slice((array)($_POST['other_types'] ?? []), 0, 8));
+$otherDesc  = clean((string)($_POST['other_desc'] ?? ''), 500);
 
-if ($name === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || $make === '' || $model === '' || $concept === '') {
-    done(false, 'Please fill in your name, email, bike and concept.', $wantsJson, 422);
+$projectOk = $isOther ? (count($otherTypes) > 0 || $otherDesc !== '') : ($make !== '' && $model !== '');
+if ($name === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || !$projectOk || $concept === '') {
+    done(false, 'Please fill in your name, email, what you want painted and your concept.', $wantsJson, 422);
 }
+$what = $isOther
+    ? 'Custom piece' . ($otherTypes ? ' (' . mb_substr(implode(', ', $otherTypes), 0, 60) . ')' : '')
+    : trim("$year $make $model");
 
 /* Attachments (images only, max 4 × 6 MB) */
 $attachments = [];
@@ -126,11 +133,15 @@ if (!empty($_FILES['photos']['name'][0])) {
 /* Build the email to the shop */
 $body  = "NEW QUOTE REQUEST\n=================\n\n";
 $body .= "Name:    $name\nEmail:   $email\nPhone:   " . ($phone ?: '—') . "\nContact: $pref\n\n";
-$body .= "Bike:    " . trim("$year $make $model") . "\nParts:   " . ($parts ? implode(', ', $parts) : '—') . "\n";
+if ($isOther) {
+    $body .= "Project: OTHER (custom piece)\nType:    " . ($otherTypes ? implode(', ', $otherTypes) : '—') . "\nDetails: " . ($otherDesc ?: '—') . "\n";
+} else {
+    $body .= "Bike:    " . trim("$year $make $model") . "\nParts:   " . ($parts ? implode(', ', $parts) : '—') . "\n";
+}
 $body .= "Budget:  " . ($budget ?: '—') . "\nTimeline:" . ($time ?: ' Flexible') . "\n\nCONCEPT\n-------\n$concept\n\n";
 $body .= "Photos attached: " . count($attachments) . "\n";
 
-$subject = 'Quote request: ' . trim("$year $make $model") . " — $name";
+$subject = 'Quote request: ' . $what . " — $name";
 $host = preg_replace('/[^a-z0-9.\-]/i', '', $_SERVER['HTTP_HOST'] ?? 'bajanconcepts.net');
 $headers = [
     'From: ' . SITE_NAME . ' <' . MAIL_FROM . '>',
@@ -158,14 +169,14 @@ $sent = send_mail(array_map('trim', explode(',', QUOTE_TO)), [], $subjectEnc, im
 /* Always keep a backup copy so no lead is lost if mail delivery hiccups */
 @file_put_contents($dataDir . '/quotes.jsonl',
     json_encode(['t' => date('c'), 'name' => $name, 'email' => $email, 'phone' => $phone, 'bike' => "$year $make $model",
-                 'parts' => $parts, 'budget' => $budget, 'timeline' => $time, 'pref' => $pref, 'concept' => $concept,
+                 'parts' => $parts, 'other_types' => $otherTypes, 'other_desc' => $otherDesc, 'budget' => $budget, 'timeline' => $time, 'pref' => $pref, 'concept' => $concept,
                  'photos' => count($attachments), 'mailed' => (bool)$sent]) . "\n", FILE_APPEND | LOCK_EX);
 
 if (!$sent) { done(false, 'Our mail server had a hiccup.', $wantsJson, 500); }
 
 /* Confirmation to the customer */
-$ack  = "Hi $name,\n\nThanks for requesting a quote from " . SITE_NAME . ". We received your request for your "
-      . trim("$year $make $model") . " and will review it and reply soon.\n\n"
+$ack  = "Hi $name,\n\nThanks for requesting a quote from " . SITE_NAME . ". We received your request for "
+      . ($isOther ? 'your custom piece' : 'your ' . $what) . " and will review it and reply soon.\n\n"
       . "If you have more reference photos or ideas, just reply to this email.\n\n— " . SITE_NAME . "\nSierra Vista, AZ\n";
 send_mail([$email], [CONFIRM_CC], '=?UTF-8?B?' . base64_encode('We got your quote request — ' . SITE_NAME) . '?=',
       "From: " . SITE_NAME . " <" . MAIL_FROM . ">\r\nReply-To: " . MAIL_FROM . "\r\nMIME-Version: 1.0\r\nContent-Type: text/plain; charset=UTF-8", $ack);
